@@ -4,36 +4,20 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 interface PersonService {
-    fun fillData(data: List<Person>)
-    fun update(id: Int, person: Person): ResponseEntity<Person>
-    fun insert(person: Person): ResponseEntity<Person>
-    fun findById(id: Int): ResponseEntity<Person>
-    fun delete(id: Int): ResponseEntity<Boolean>
+    fun fillData(data: List<Person>): ResponseEntity<List<Person>>
+    fun delete(): ResponseEntity<Boolean>
     fun getAll(): ResponseEntity<List<Person>>
 }
 
 @Service
 class PersonServiceImpl(private val repository: PersonRepository) : PersonService {
 
-    override fun fillData(data: List<Person>) {
-        repository.fill(data)
+    override fun fillData(data: List<Person>): ResponseEntity<List<Person>> {
+        return ResponseEntity.ok(repository.fill(data))
     }
 
-    override fun update(id: Int, person: Person): ResponseEntity<Person> {
-        return ResponseEntity.ok(repository.update(id, person))
-    }
-
-    override fun insert(person: Person): ResponseEntity<Person> {
-        return ResponseEntity.ok(repository.insert(person))
-    }
-
-    override fun findById(id: Int): ResponseEntity<Person> {
-        val person = repository.findById(id) ?: return ResponseEntity.notFound().build()
-        return ResponseEntity.ok(person)
-    }
-
-    override fun delete(id: Int): ResponseEntity<Boolean> {
-        return ResponseEntity.ok(repository.delete(id))
+    override fun delete(): ResponseEntity<Boolean> {
+        return ResponseEntity.ok(repository.delete())
     }
 
     override fun getAll(): ResponseEntity<List<Person>> {
